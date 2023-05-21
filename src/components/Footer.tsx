@@ -14,7 +14,7 @@ export const Footer = ({disabled, onSendMessage }: Props) => {
           Visualização de pesquisa gratuita. O ChatGPT pode produzir informações
           imprecisas sobre pessoas, lugares ou fatos. <br />
           <a href="#" className="underline">
-            ChatGPT de 12 de maio
+            ChatGPT Clone - By: Claytonc40
           </a>
         </div>
       </div>
