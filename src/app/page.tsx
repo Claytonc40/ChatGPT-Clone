@@ -9,6 +9,7 @@ import { Chat } from "@/types/Chat";
 import { Footer } from "@/components/Footer";
 import { v4 as uuidv4 } from "uuid";
 import { SidebarChatButton } from "@/components/SidebarChatButton";
+import { openai } from "@/utils/openai";
 
 const Page = () => {
   const [sidebarOpened, setSidebarOpened] = useState(false);
@@ -25,22 +26,25 @@ const Page = () => {
     if (iaLoading) getIaResponse();
   }, [iaLoading]);
 
-  const getIaResponse = () => {
-    setTimeout(() => {
-      let chatListClone = [...chatList];
-      let chatIndex = chatListClone.findIndex(
-        (item) => item.id === chatActiveId
+  const getIaResponse = async () => {
+    let chatListClone = [...chatList];
+    let chatIndex = chatListClone.findIndex((item) => item.id === chatActiveId);
+    if (chatIndex > -1) {
+      const response = await openai.generate(
+        openai.translateMenssages(chatListClone[chatIndex].menssages)
       );
-      if (chatIndex > -1) {
+
+      if (response) {
         chatListClone[chatIndex].menssages.push({
           id: uuidv4(),
           author: "ai",
-          body: "Menssages da IA!",
+          body: response,
         });
-        setChatList(chatListClone);
-        setIaLoading(false);
       }
-    }, 2000);
+
+      setChatList(chatListClone);
+      setIaLoading(false);
+    }
   };
 
   const closeSidebar = () => {
